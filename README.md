@@ -10,6 +10,8 @@ $ apt-get install python3-venv
 $ python3 -m venv venv  
 $ source venv/bin/activate  
 $ pip3 install -r requirements.txt  
+$ autopep8 --in-place --aggressive --aggressive openstack-api.py
+$ flake8 openstack-api.py
 ```
 
 Reference: https://hackmd.io/s/BJMZcFQ0b  
