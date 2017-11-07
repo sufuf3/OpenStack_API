@@ -33,10 +33,6 @@ class OpenstackAuth():
         header = {'Content-type': 'application/json',
                   'X-Auth-Token': token}
         print("Get Token: " + token)
-        print("Header: ")
-        print(header)
-        print("All result: ")
-        print(result.json())
         return header
 
 
@@ -47,11 +43,8 @@ class OpenstackImage():
 
     def get_images(self):
         api_url = self.url + '/image/v2/images'
-        print(api_url)
         payload = {"X-Auth-Token": self.header["X-Auth-Token"]}
         result = requests.get(api_url, headers=payload)
-        print("Get list of images: ")
-        print(result.json())
         return result.json()['images']
 
     def get_image_detail(self, imagename, image_list):
@@ -68,12 +61,9 @@ class OpenstackFlavor():
         self.url = url
 
     def get_flavors(self, image_id):
-        print(self.header["X-Auth-Token"])
         api_url = self.url + '/compute/v2.1/flavors'
         payload = {"X-Auth-Token": self.header["X-Auth-Token"]}
         result = requests.get(api_url, headers=payload)
-        print("Get list of flavors: ")
-        print(result.json())
         return result.json()['flavors']
 
     def get_flavor_detail(self, flavor_name, flavor_list):
@@ -82,4 +72,23 @@ class OpenstackFlavor():
                 print('Flavor ID is: ' + i['id'])
                 return i['id']
         print('There is no flavor named: ' + flavor_name)
-        pass
+
+
+class OpenstackServer():
+    def __init__(self, header, url):
+        self.header = header
+        self.url = url
+
+    def get_servers(self):
+        api_url = self.url + '/compute/v2.1/servers'
+        payload = {"X-Auth-Token": self.header["X-Auth-Token"]}
+        result = requests.get(api_url, headers=payload)
+        return result.json()['servers']
+
+    def get_server_detail(self, server_name, server_list):
+        for i in server_list:
+            if i['name'] == server_name:
+                api_url = self.url + '/compute/v2.1/servers/' + i['id']
+                payload = {"X-Auth-Token": self.header["X-Auth-Token"]}
+                result = requests.get(api_url, headers=payload)
+                return result.json()

@@ -13,5 +13,11 @@ $ pip3 install -r requirements.txt
 $ autopep8 --in-place --aggressive --aggressive openstack-api.py
 $ flake8 openstack-api.py
 ```
+  
+# Execute  
 
+```bash
+$ python openstack-api.py -s [instance_name]
+```
+  
 Reference: https://hackmd.io/s/BJMZcFQ0b  
