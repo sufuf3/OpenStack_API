@@ -6,6 +6,20 @@ import json
 from libs.OpenStackAPI import OpenstackAuth, OpenstackImage, OpenstackFlavor, OpenstackServer
 
 
+def get_image_id(auth_header, url, image_name):
+    image_api = OpenstackImage(auth_header, url)
+    image_list = image_api.get_images()
+    image_id = image_api.get_image_detail(image_name, image_list)
+    return image_id
+
+
+def get_flavor_id(auth_header, url, image_id, flavor_name):
+    flavor_api = OpenstackFlavor(auth_header, url)
+    flavor_list = flavor_api.get_flavors(image_id)
+    flavor_id = flavor_api.get_flavor_detail(flavor_name, flavor_list)
+    return flavor_id
+
+
 def main():
     "Using argparse to get instance name"
     parser = argparse.ArgumentParser(description='openstack-api')
@@ -24,15 +38,17 @@ def main():
         config['OPENSTACK_API']['PASSWORD'])
 
     # Get Image of cirros
-    image_api = OpenstackImage(auth_header, config['OPENSTACK_API']['URL'])
-    image_list = image_api.get_images()
-    image_id = image_api.get_image_detail(config['IMAGE']['NAME'], image_list)
+    image_id = get_image_id(
+        auth_header,
+        config['OPENSTACK_API']['URL'],
+        config['IMAGE']['NAME'])
 
     # Get Flavor ID of m1.nano
-    flavor_api = OpenstackFlavor(auth_header, config['OPENSTACK_API']['URL'])
-    flavor_list = flavor_api.get_flavors(image_id)
-    flavor_id = flavor_api.get_flavor_detail(
-        config['FLAVOR']['NAME'], flavor_list)
+    flavor_id = get_flavor_id(
+        auth_header,
+        config['OPENSTACK_API']['URL'],
+        image_id,
+        config['FLAVOR']['NAME'])
 
     # Create Server(instance)
     server_api = OpenstackServer(auth_header, config['OPENSTACK_API']['URL'])
