@@ -52,6 +52,7 @@ def main():
 
     # Create Server(instance)
     server_api = OpenstackServer(auth_header, config['OPENSTACK_API']['URL'])
+    server_api.create_server(openstackapi.servername, image_id, flavor_id)
 
     # Show Instance information
     server_list = server_api.get_servers()

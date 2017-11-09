@@ -92,3 +92,13 @@ class OpenstackServer():
                 payload = {"X-Auth-Token": self.header["X-Auth-Token"]}
                 result = requests.get(api_url, headers=payload)
                 return result.json()
+
+    def create_server(self, server_name, image_id, flavor_id):
+        api_url = self.url + '/compute/v2.1/servers'
+        payload = {
+            "server":{
+                "name": server_name,
+                "imageRef": image_id,
+                "flavorRef": flavor_id,
+            }}
+        requests.post(api_url, headers=self.header, json=payload)
